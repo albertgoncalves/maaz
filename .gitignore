@@ -1,0 +1,12 @@
+*
+!.gitignore
+!shell.nix
+!.shellhook
+!.clang-format
+!scripts/
+!*.sh
+!examples/
+!*.dot
+!src/
+!*.c
+!*.h
