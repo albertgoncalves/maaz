@@ -48,15 +48,22 @@ flags=(
     "-Wunused-macros"
     "-Wwrite-strings"
 )
+bins=(
+    test_heap
+    main
+)
 
 (
     cppcheck --enable=all --suppress=missingIncludeSystem "$WD/src"
     clang-format -i -verbose "$WD/src/"*
     start=$(now)
-    gcc "${flags[@]}" -o "$WD/bin/main" "$WD/src/main.c"
+    for x in "${bins[@]}"; do
+        gcc "${flags[@]}" -o "$WD/bin/$x" "$WD/src/$x.c"
+    done
     end=$(now)
     python3 -c "print(\"Compiled! ({:.3f}s)\".format(${end} - ${start}))"
 )
 
+"$WD/bin/test_heap"
 "$WD/bin/main" | dot -Tpng > "$WD/out/main.png"
 feh "$WD/out/main.png"
