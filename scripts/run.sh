@@ -7,7 +7,6 @@ now () {
 }
 
 flags=(
-    "-fno-strict-aliasing"
     "-fshort-enums"
     "-fsingle-precision-constant"
     "-g"
