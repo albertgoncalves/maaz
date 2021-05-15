@@ -14,7 +14,7 @@ flags=(
     "-march=native"
     "-O1"
     "-static"
-    "-std=c99"
+    "-std=c11"
     "-Wall"
     "-Wcast-align"
     "-Wcast-qual"
