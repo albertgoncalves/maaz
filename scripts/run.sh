@@ -50,6 +50,7 @@ flags=(
 )
 bins=(
     test_heap
+    test_dijkstra
     main
 )
 
@@ -65,5 +66,6 @@ bins=(
 )
 
 "$WD/bin/test_heap"
+"$WD/bin/test_dijkstra"
 "$WD/bin/main" | dot -Tpng > "$WD/out/main.png"
 feh "$WD/out/main.png"

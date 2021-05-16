@@ -40,7 +40,6 @@ static void show(Memory* memory, u8 start, u8 end) {
 }
 
 i32 main(void) {
-    fprintf(stderr, "sizeof(Memory) : %zu\n", sizeof(Memory));
     Memory* memory = calloc(1, sizeof(Memory));
     EXIT_IF(!memory);
     {
