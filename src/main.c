@@ -3,7 +3,9 @@
 #define COLOR_START "#03FCC6FF"
 #define COLOR_END   "#806EF5FF"
 #define COLOR_PATH  "#FC350390"
+#define INDENT      "    "
 
+STATIC_ASSERT(CAP_VERTICES <= 64, "64 < CAP_VERTICES");
 static void show(Memory* memory, u8 start, u8 end) {
     printf("graph {\n"
            "    \"%c\"[style=\"filled\", fillcolor=\"%s\"]\n"
@@ -12,29 +14,39 @@ static void show(Memory* memory, u8 start, u8 end) {
            COLOR_START,
            FROM_INDEX(end),
            COLOR_END);
+    u64 visited[CAP_NODES] = {0};
+    for (u8 i = end; i != start;) {
+        printf(INDENT "\"%c\" -- \"%c\""
+                      "["
+                      "label=\"%hhu\", "
+                      "penwidth=5.0, "
+                      "color=\"%s\""
+                      "]\n",
+               FROM_INDEX(i),
+               FROM_INDEX(memory->vertices[i].previous),
+               memory->distance[i][memory->vertices[i].previous],
+               COLOR_PATH);
+        if (i != end) {
+            printf(INDENT "\"%c\"[style=\"filled\", fillcolor=\"%s\"]\n",
+                   FROM_INDEX(i),
+                   COLOR_PATH);
+        }
+        visited[i] |= 1lu << memory->vertices[i].previous;
+        visited[memory->vertices[i].previous] |= 1lu << i;
+        i = memory->vertices[i].previous;
+    }
     for (u8 i = 0; i < CAP_VERTICES; ++i) {
         for (u8 j = i + 1; j < CAP_VERTICES; ++j) {
-            if (!memory->distance[i][j]) {
+            if (((visited[i] >> j) & 1lu) || ((visited[j] >> i) & 1lu) ||
+                (!memory->distance[i][j]))
+            {
                 continue;
             }
-            printf("    \"%c\" -- \"%c\"[label=\"%hhu\"]\n",
+            printf(INDENT "\"%c\" -- \"%c\"[label=\"%hhu\"]\n",
                    FROM_INDEX(i),
                    FROM_INDEX(j),
                    memory->distance[i][j]);
         }
-    }
-    for (u8 i = end; i != start;) {
-        Vertex vertex = memory->vertices[i];
-        printf("    \"%c\" -- \"%c\"[penwidth=5.0, color=\"%s\"]\n",
-               FROM_INDEX(i),
-               FROM_INDEX(vertex.previous),
-               COLOR_PATH);
-        if (i != end) {
-            printf("    \"%c\"[style=\"filled\", fillcolor=\"%s\"]\n",
-                   FROM_INDEX(i),
-                   COLOR_PATH);
-        }
-        i = vertex.previous;
     }
     printf("}\n");
 }
