@@ -33,6 +33,11 @@ Bool check(Heap* heap, u8 i) {
     }
 
 i32 main(void) {
+    fprintf(stderr,
+            "sizeof(Node) : %zu\n"
+            "sizeof(Heap) : %zu\n",
+            sizeof(Node),
+            sizeof(Heap));
     Heap* heap = calloc(1, sizeof(Heap));
     EXIT_IF(!heap);
     {
@@ -74,9 +79,9 @@ i32 main(void) {
             u8 current = pop(heap).priority;
             EXIT_IF((!check(heap, 0)) || (current < previous));
             previous = current;
-            printf(".");
+            fprintf(stderr, ".");
         }
-        printf("\n");
+        fprintf(stderr, "\n");
     }
     free(heap);
     return EXIT_SUCCESS;

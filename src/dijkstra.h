@@ -27,13 +27,11 @@ static void dijkstra(Memory* memory, u8 start, u8 end) {
     }
     u64 visited = 0;
     insert(&memory->unvisited, (Node){.vertex = start, .priority = 0});
-    u8 steps = 0;
     while (memory->unvisited.len_nodes != 0) {
         Node node = pop(&memory->unvisited);
         if (node.vertex == end) {
             break;
         }
-        ++steps;
         for (u8 i = 0; i < CAP_VERTICES; ++i) {
             if (!memory->distance[node.vertex][i]) {
                 continue;
@@ -52,7 +50,6 @@ static void dijkstra(Memory* memory, u8 start, u8 end) {
         }
         visited |= 1lu << node.vertex;
     }
-    fprintf(stderr, "solved in `%hhu` steps\n", steps);
     return;
 }
 
