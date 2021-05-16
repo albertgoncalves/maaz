@@ -1,59 +1,4 @@
-#include "heap.h"
-
-#define CAP_VERTICES 64
-
-typedef struct {
-    u8 distance;
-    u8 previous;
-} Vertex;
-
-typedef struct {
-    u8     distance[CAP_VERTICES][CAP_VERTICES];
-    Vertex vertices[CAP_VERTICES];
-    Heap   unvisited;
-} Memory;
-
-STATIC_ASSERT(CAP_VERTICES <= 64, "64 < CAP_VERTICES");
-static void dijkstra(Memory* memory, u8 start, u8 end) {
-    for (u8 i = 0; i < CAP_VERTICES; ++i) {
-        if (i == start) {
-            memory->vertices[i].distance = 0;
-        } else {
-            memory->vertices[i].distance = MAX_U8;
-        }
-    }
-    u64 visited = 0;
-    insert(&memory->unvisited, (Node){.vertex = start, .priority = 0});
-    u8 steps = 0;
-    while (memory->unvisited.len_nodes != 0) {
-        Node node = pop(&memory->unvisited);
-        if (node.vertex == end) {
-            break;
-        }
-        ++steps;
-        for (u8 i = 0; i < CAP_VERTICES; ++i) {
-            if (!memory->distance[node.vertex][i]) {
-                continue;
-            }
-            u8 distance = memory->vertices[node.vertex].distance +
-                          memory->distance[node.vertex][i];
-            if (distance < memory->vertices[i].distance) {
-                memory->vertices[i].distance = distance;
-                memory->vertices[i].previous = node.vertex;
-                if (!((visited >> node.vertex) & 1lu)) {
-                    drop(&memory->unvisited, i);
-                    insert(&memory->unvisited,
-                           (Node){.vertex = i, .priority = distance});
-                }
-            }
-        }
-        visited |= 1lu << node.vertex;
-    }
-    fprintf(stderr, "solved in `%hhu` steps\n", steps);
-    return;
-}
-
-#define FROM_INDEX(index) ((char)('A' + index))
+#include "dijkstra.h"
 
 #define COLOR_START "#03FCC6FF"
 #define COLOR_END   "#806EF5FF"
@@ -93,17 +38,6 @@ static void show(Memory* memory, u8 start, u8 end) {
     }
     printf("}\n");
 }
-
-#define INTO_INDEX(char_) ((u8)(char_ - 'A'))
-#define SET_DISTANCE(memory, from, to, distance_)             \
-    {                                                         \
-        u8 i = INTO_INDEX(from);                              \
-        u8 j = INTO_INDEX(to);                                \
-        EXIT_IF((CAP_VERTICES <= i) || (CAP_VERTICES <= j) || \
-                (distance_ == MAX_U8));                       \
-        memory->distance[i][j] = distance_;                   \
-        memory->distance[j][i] = distance_;                   \
-    }
 
 i32 main(void) {
     fprintf(stderr, "sizeof(Memory) : %zu\n", sizeof(Memory));
