@@ -57,8 +57,6 @@ i32 main(void) {
         SET_DISTANCE(memory, 'I', 'D', 1);
         SET_DISTANCE(memory, 'A', 'J', 9);
         SET_DISTANCE(memory, 'J', 'H', 2);
-    }
-    {
         u8 start = INTO_INDEX('A');
         u8 end = INTO_INDEX('E');
         dijkstra(memory, start, end);
