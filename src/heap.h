@@ -15,6 +15,8 @@ typedef struct {
     u8   len_nodes;
 } Heap;
 
+#define GET_PARENT(i)     ((u8)(((i + 1) / 2) - 1))
+#define GET_LEFT_CHILD(i) ((u8)(((i + 1) * 2) - 1))
 #define SWAP(nodes, i, j)    \
     {                        \
         Node t = nodes[i];   \
@@ -23,19 +25,19 @@ typedef struct {
     }
 
 static void balance_up(Heap* heap, u8 i) {
-    u8 j = (u8)(((i + 1) / 2) - 1);
+    u8 j = GET_PARENT(i);
     while (0 < i) {
         if (heap->nodes[i].priority < heap->nodes[j].priority) {
             SWAP(heap->nodes, i, j);
         }
         i = j;
-        j = (u8)(((i + 1) / 2) - 1);
+        j = GET_PARENT(i);
     }
 }
 
 static void balance_down(Heap* heap, u8 i) {
     for (;;) {
-        u8 l = (u8)(((i + 1) * 2) - 1);
+        u8 l = GET_LEFT_CHILD(i);
         u8 r = l + 1;
         u8 m = i;
         if ((l < heap->len_nodes) &&

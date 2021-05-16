@@ -5,7 +5,7 @@ Bool check(Heap* heap, u8 i) {
     if (heap->len_nodes <= i) {
         return TRUE;
     }
-    u8 l = (u8)(((i + 1) * 2) - 1);
+    u8 l = GET_LEFT_CHILD(i);
     u8 r = l + 1;
     if ((l < heap->len_nodes) &&
         (heap->nodes[l].priority < heap->nodes[i].priority))
@@ -62,6 +62,11 @@ i32 main(void) {
         INSERT(heap, 0);
         INSERT(heap, 25);
         DROP(heap, 0);
+        INSERT(heap, 200);
+        DROP(heap, 12);
+        INSERT(heap, 200);
+        DROP(heap, 0);
+        INSERT(heap, 1);
     }
     {
         u8 previous = 0;
