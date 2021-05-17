@@ -1,15 +1,15 @@
 #include "dijkstra.h"
 
-#define COLOR_START "#03FCC6FF"
-#define COLOR_END   "#806EF5FF"
+#define COLOR_START "#03FCC69F"
+#define COLOR_END   "#806EF59F"
 #define COLOR_PATH  "#FC350390"
+
 #define INDENT      "    "
+#define FILLED_NODE "\"%c\"[style=\"filled\", fillcolor=\"%s\"]\n"
 
 STATIC_ASSERT(CAP_VERTICES <= 64, "64 < CAP_VERTICES");
 static void show(Memory* memory, u8 start, u8 end) {
-    printf("graph {\n"
-           "    \"%c\"[style=\"filled\", fillcolor=\"%s\"]\n"
-           "    \"%c\"[style=\"filled\", fillcolor=\"%s\"]\n",
+    printf("graph {\n" INDENT FILLED_NODE INDENT FILLED_NODE,
            FROM_INDEX(start),
            COLOR_START,
            FROM_INDEX(end),
@@ -17,19 +17,13 @@ static void show(Memory* memory, u8 start, u8 end) {
     u64 visited[CAP_NODES] = {0};
     for (u8 i = end; i != start;) {
         printf(INDENT "\"%c\" -- \"%c\""
-                      "["
-                      "label=\"%hhu\", "
-                      "penwidth=5.0, "
-                      "color=\"%s\""
-                      "]\n",
+                      "[label=\"%hhu\", penwidth=5.0, color=\"%s\"]\n",
                FROM_INDEX(i),
                FROM_INDEX(memory->vertices[i].previous),
                memory->distance[i][memory->vertices[i].previous],
                COLOR_PATH);
         if (i != end) {
-            printf(INDENT "\"%c\"[style=\"filled\", fillcolor=\"%s\"]\n",
-                   FROM_INDEX(i),
-                   COLOR_PATH);
+            printf(INDENT FILLED_NODE, FROM_INDEX(i), COLOR_PATH);
         }
         visited[i] |= 1lu << memory->vertices[i].previous;
         visited[memory->vertices[i].previous] |= 1lu << i;
