@@ -1,11 +1,10 @@
 with import <nixpkgs> {};
-pkgsMusl.mkShell {
+mkShell.override { stdenv = llvmPackages_11.stdenv; } {
     buildInputs = [
-        clang_10
         cppcheck
         feh
         graphviz
-        python38
+        python3
         shellcheck
     ];
     shellHook = ''
