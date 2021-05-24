@@ -10,10 +10,12 @@ flags=(
     "-ferror-limit=1"
     "-fshort-enums"
     "-march=native"
+    "-O0"
     "-std=c11"
     "-Werror"
     "-Weverything"
     "-Wno-disabled-macro-expansion"
+    "-Wno-error=#warnings"
     "-Wno-extra-semi-stmt"
     "-Wno-reserved-id-macro"
 )
@@ -24,7 +26,6 @@ bins=(
 )
 
 (
-    cppcheck --enable=all --suppress=missingIncludeSystem "$WD/src"
     clang-format -i -verbose "$WD/src/"*
     start=$(now)
     for x in "${bins[@]}"; do
