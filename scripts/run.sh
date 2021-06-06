@@ -9,6 +9,7 @@ now () {
 flags=(
     "-ferror-limit=1"
     "-fshort-enums"
+    "-fuse-ld=lld"
     "-march=native"
     "-O0"
     "-std=c11"
