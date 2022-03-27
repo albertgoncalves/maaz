@@ -8,17 +8,17 @@ now () {
 
 flags=(
     "-ferror-limit=1"
-    "-fshort-enums"
-    "-fuse-ld=lld"
+    -fshort-enums
     "-march=native"
-    "-O0"
-    "-std=c11"
-    "-Werror"
-    "-Weverything"
-    "-Wno-disabled-macro-expansion"
-    "-Wno-error=#warnings"
-    "-Wno-extra-semi-stmt"
-    "-Wno-reserved-id-macro"
+    -O1
+    "-std=c99"
+    -Werror
+    -Weverything
+    -Wno-declaration-after-statement
+    -Wno-disabled-macro-expansion
+    -Wno-extra-semi-stmt
+    -Wno-padded
+    -Wno-reserved-id-macro
 )
 bins=(
     test_heap
