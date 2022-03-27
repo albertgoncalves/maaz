@@ -30,7 +30,7 @@ bins=(
     clang-format -i -verbose "$WD/src/"*
     start=$(now)
     for x in "${bins[@]}"; do
-        clang "${flags[@]}" -o "$WD/bin/$x" "$WD/src/$x.c"
+        mold -run clang "${flags[@]}" -o "$WD/bin/$x" "$WD/src/$x.c"
     done
     end=$(now)
     python3 -c "print(\"Compiled! ({:.3f}s)\".format(${end} - ${start}))"

@@ -3,7 +3,7 @@ mkShell.override { stdenv = llvmPackages_14.stdenv; } {
     buildInputs = [
         feh
         graphviz
-        lld_12
+        mold
         python3
         shellcheck
     ];
